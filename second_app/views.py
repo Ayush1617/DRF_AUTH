@@ -1,6 +1,4 @@
 from django.shortcuts import render
-
-# Create your views here.
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.decorators import api_view,authentication_classes,permission_classes
@@ -8,7 +6,6 @@ from .models import Movies,User
 from rest_framework import status
 from .serializers import MoviesSerializers , UserSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView #module
-# from .serializers import MyTokenObtainPairSerializer  #my serilaizer class
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -24,7 +21,7 @@ def signup(request):
     serializer = UserSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
-        user = User.objects.get(name=request.data['name'])
+        user = User.objects.get(username=request.data['username'])
         token = RefreshToken.for_user(user)
         return Response({"refresh": str(token), "access": str(token.access_token)})
     return Response(serializer.errors, status=400)
@@ -33,7 +30,7 @@ def signup(request):
 
 @api_view(['POST'])
 def login(request):
-    username = request.data.get('name')
+    username = request.data.get('username')
     password = request.data.get('password')
 
     user = authenticate(username=username, password=password)
@@ -48,18 +45,10 @@ def login(request):
 
 @api_view(['GET'])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def test_token(request):
-        return Response({"message": "Token authentication successful", "user_email": request.user.email}) 
+        return Response({"message": "Token authentication successful", "username": request.user.username}) 
 
-# @api_view(['POST'])
-# def login (request):
-#     user =  get_object_or_404(User,name = request.data['name'])
-#     if not user.check_password(request.data['password']):
-#           return Response({"details":"not found"},status=400)
-#     token,created= Token.objects.get_or_create(user=user)
-#     serializer  = UserSerializer(instance=user)
-#     return Response({"tokan":token.key,"user": serializer.data})
 #########################################################################################################################################
 @api_view(['GET'])
 def get_Movies(request):

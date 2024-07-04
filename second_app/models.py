@@ -1,6 +1,4 @@
 from django.db import models
-
-# Create your models here.
 class Movies(models.Model):
     title = models.CharField(max_length=100)
     type = models.CharField(max_length=100)
@@ -13,6 +11,7 @@ class Movies(models.Model):
     origin = models.CharField(max_length=100)
    
 class User (models.Model):
-    name = models.CharField(max_length=100)
+    username = models.CharField(max_length=100)
     email = models.EmailField()
     password = models.CharField(max_length=50)
+      

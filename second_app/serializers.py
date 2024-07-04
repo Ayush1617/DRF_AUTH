@@ -30,11 +30,11 @@ class MoviesSerializers(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['name','email','password']
+        fields = ['username','password']
 
 
 
     class UserSerializer(TokenObtainPairSerializer):
         password = serializers.CharField()
         email = serializers.EmailField()
-        name = serializers.CharField(max_length=100)
+        username = serializers.CharField(max_length=100)
